@@ -1,5 +1,5 @@
 'use strict';
-const continuarRegistro = ()=>{
+const registrarTelefono = ()=>{
 	const divContenido = $("<div></div>");
 	const divMensaje =$("<div class='text-center mb-2rem pb-2rem'></div>");
 	const img = $("<img src='img/icons/phone.png' alt='phone' class='mt-5rem'>");
@@ -52,12 +52,14 @@ const continuarRegistro = ()=>{
 const reRender = (contenido)=>{
 	contenido.empty();	
 
-	contenido.append(continuarRegistro());
+	contenido.append(registrarTelefono());
 };
 
-const RegistrarTelefono = (update)=>{
+const SliderRegistro = (update)=>{
 	const div = $("<div></div>");
-	const divSlider = $("<div></div>");
+	const divSlider = $("<div class='custom1 owl-carousel owl-theme'></div>");
+	const div1 = $("<div class='item'><img src='img/icons/icon-people.png'/></div>");
+	const div2 = $("<div class='item'><img src='img/icons/happy-person.png'/></div>");
 	const button = $("<button>Registrarme</button>");
 
 	button.on("click", (e)=>{
@@ -65,6 +67,8 @@ const RegistrarTelefono = (update)=>{
 		reRender(div);
 	});
 
+	divSlider.append(div1);
+	divSlider.append(div2);
 	div.append(divSlider);
 	div.append(button);
 	return div;
