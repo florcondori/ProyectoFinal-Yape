@@ -1,0 +1,77 @@
+*{
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+	font-family: 'Roboto' !important;
+}
+body{
+	width: 80%;
+	margin: 0 auto;
+}
+a{
+	text-decoration: none; 
+}
+img{
+	width: 200px;
+	height: auto;
+}
+input{
+	outline: none;
+	border:none;
+	text-align: center;
+	padding-bottom: 5px;
+	font-size: 1rem;
+}
+button{
+	border: none;
+	outline: none;
+	padding: 10px;
+	color: white;
+	background-color: #fbd43b;
+	text-transform: uppercase;
+}
+button[disabled='disabled']{
+	background-color: gray;
+}
+form a{
+	color: #00c3a3;
+}
+.border-botton{
+	border-bottom: 1px solid gray;
+}
+.flex-center{
+	display: flex;
+	justify-content: center;
+}
+.icon{
+	background-repeat: no-repeat;
+	background-size: cover;
+	display: inline-block;
+	margin-bottom: -4px;
+	margin-left: 10px;
+	height: 25px;
+	width: 50px;
+}
+.phoneandnumber{
+	background-image: url("../img/icons/phoneandnumber.png");
+}
+/*reutilizables*/
+.text-center{
+	text-align: center;
+}
+.fs-14{
+	font-size: 14px;
+}
+.mt-5rem{
+	margin-top: 5rem;
+}
+.mv-14px{
+	margin-bottom: 14px;
+	margin-top: 14px;
+}
+.mb-2rem{
+	margin-bottom: 2rem;
+}
+.pb-2rem{
+	padding-bottom: 2rem;
+}
