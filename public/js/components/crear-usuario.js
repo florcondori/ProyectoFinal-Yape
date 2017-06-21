@@ -28,12 +28,17 @@ const formularioCrearCuenta = ()=>{
 	const mensaje = $("<p>Cuida esta clave como oro , es tu acceso a Yape.</p>");
 	const btnCrearCuenta = $("<button>Crear Cuenta</button>");
 	btnCrearCuenta.attr('disabled', true);
+	let cont = 0;
+	const validarInput = (input)=>{
+		if(input.val() !=null && input.val()!= undefined && input.val().trim() != ""){
+			return true;
+		}else{
+			return false;
+		}
+	};
 
-	formCrearCuenta.on("keyup", ()=>{
-		console.log(inputNombre.val());
-		console.log(inputEmail.val());
-		console.log(inputCode.val());
-		if(inputNombre.val().length>2 && inputEmail.val() != null && inputCode.val() != null){
+	formCrearCuenta.on("keyup", (e)=>{		
+		if(validarInput(inputNombre) && validarInput(inputEmail) && validarInput(inputCode)){
 			btnCrearCuenta.attr('disabled', false);
 		}else{
 			btnCrearCuenta.attr('disabled', true);
@@ -42,14 +47,24 @@ const formularioCrearCuenta = ()=>{
 
 	formCrearCuenta.on("submit",(e)=>{
 		e.preventDefault();
-		if (!/([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})/gi.test(inputEmail.val())) {
-	      if(inputCode.val() == state.data.code){
-	      		console.log("enviado a la Api");
-	      }else{
-	      	errorCodigo.text("mal codigo");
-	      }
+		if (/([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})/gi.test(inputEmail.val())) {
+	     errorEmail.text("bien");
+	     cont++;
 	    } else {
 	      errorEmail.text("mal email");
+	    }
+
+	    if(inputCode.val() == state.data.code){
+	    	errorCode.text("bien");
+	    	cont++;
+	    }else{
+	      	errorCode.text("mal codigo");
+	    }
+	      	console.log(cont);
+	    if(cont ==2){
+	    	console.log("enviar Api");
+	    }else{
+	    	console.log("modificar errores");
 	    }
 	});
 
@@ -93,7 +108,7 @@ const CrearUsuario = ()=>{
 
 	input.on("keyup", (e)=>{
 		console.log(input.val());
-		if(input.val() == state.data.code){
+		if(input.val().trim() == state.data.code){
 			console.log("saltar a la otra pagina");
 			reRenderUsuario(divMensaje, divFormulario);
 		}
@@ -111,5 +126,6 @@ const CrearUsuario = ()=>{
 
 	div.append(divMensaje);
 	div.append(divFormulario);
+
 	return div;
 };
