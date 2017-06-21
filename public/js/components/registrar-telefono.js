@@ -1,5 +1,5 @@
 'use strict';
-const registrarTelefono = ()=>{
+const registrarTelefono = (update)=>{
 	const divContenido = $("<div></div>");
 	const divMensaje =$("<div class='text-center mb-2rem pb-2rem'></div>");
 	const img = $("<img src='img/icons/phone.png' alt='phone' class='mt-5rem'>");
@@ -34,7 +34,6 @@ const registrarTelefono = ()=>{
 	});
 
 	form.on("change",(e)=> {
-		console.log(input.val());
 		if(input.val().length ==9 && check.prop("checked")){
 			button.attr('disabled', false);
 		}else{
@@ -47,6 +46,8 @@ const registrarTelefono = ()=>{
 		$.post("/api/registerNumber",{phone:input.val(),terms:true},(json)=>{
 			console.log(json.message);
 			console.log(json.data);
+			state.data = json.data;
+			update();
 		});
 	});
 
@@ -55,10 +56,10 @@ const registrarTelefono = ()=>{
 	return divContenido;
 };
 
-const reRender = (contenido)=>{
+const reRender = (contenido, update)=>{
 	contenido.empty();	
 
-	contenido.append(registrarTelefono());
+	contenido.append(registrarTelefono(update));
 };
 
 const SliderRegistro = (update)=>{
@@ -81,7 +82,7 @@ const SliderRegistro = (update)=>{
 
 	button.on("click", (e)=>{
 		e.preventDefault();
-		reRender(div);
+		reRender(div, update);
 	});
 
 	item1.append(img1);

@@ -3,13 +3,18 @@ const render = (root)=>{
 	root.empty();
 
 	const wrapper = $("<div class='wrapper'></div>");
-	wrapper.append(SliderRegistro());
+
+	if(state.data === null){
+		wrapper.append(SliderRegistro(_ => render(root)));
+	}else{
+		wrapper.append(CrearUsuario());
+	}
 
 	root.append(wrapper);
 }
 
 const state = {
-	code: null
+	data: null
 };
 
 $(_=>{

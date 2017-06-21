@@ -48,7 +48,7 @@ form a{
 }
 .icon{
 	background-repeat: no-repeat;
-	background-size: cover;
+	background-size: contain;
 	display: inline-block;
 	margin-bottom: -4px;
 	margin-left: 10px;
@@ -57,6 +57,21 @@ form a{
 }
 .phoneandnumber{
 	background-image: url("../img/icons/phoneandnumber.png");
+}
+.lock{
+	background-image: url("../img/icons/lock.png");
+}
+.clock{
+	background-image: url("../img/icons/clock.png");
+}
+.user{
+	background-image: url("../img/icons/user.png");
+}
+.message{
+	background-image: url("../img/icons/message-gray.png");
+}
+.error{
+	color: red;
 }
 /*reutilizables*/
 .text-center{
