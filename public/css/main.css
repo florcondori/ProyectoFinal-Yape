@@ -11,6 +11,9 @@ body{
 a{
 	text-decoration: none; 
 }
+p{
+	line-height: 1.5;
+}
 img{
 	width: 200px;
 	height: auto;
@@ -74,4 +77,8 @@ form a{
 }
 .pb-2rem{
 	padding-bottom: 2rem;
+}
+.block{
+	display: block;
+	width: 100%;
 }
