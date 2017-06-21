@@ -12,7 +12,7 @@ const mensajeCrearCuenta = ()=>{
 	return div;
 };
 
-const formularioCrearCuenta = ()=>{
+const formularioCrearCuenta = (update)=>{
 	const formCrearCuenta = $("<form></form>");
 	const divInputNombre = $("<div class='border-botton mv-14px'></div>");
 	const iconNombre = $("<i class='icon user'></i>");
@@ -59,7 +59,7 @@ const formularioCrearCuenta = ()=>{
 	    console.log(cont);
 	    if(cont == 2){
 	    	console.log("enviar Api");
-	    	let objUsuario = {  phone: state.usuario.phone,
+	    	let objUsuario = {  phone: state.code.phone,
 			    				name: inputNombre.val(),
 			    				email: inputEmail.val(),
 			    				password: inputPasword.val()
@@ -68,6 +68,8 @@ const formularioCrearCuenta = ()=>{
 	    	$.post("/api/createUser", objUsuario,(json)=>{
 	    		state.usuario = json.data;
 	    		console.log(state.usuario);
+
+	    		update();
 	    	});
 
 	    }else{
@@ -92,19 +94,19 @@ const formularioCrearCuenta = ()=>{
 	return formCrearCuenta;
 };
 
-const reRenderUsuario = (mensaje, contenedorForm)=>{
+const reRenderUsuario = (mensaje, contenedorForm, update)=>{
 	mensaje.empty();
 	contenedorForm.empty();
 
 	mensaje.append(mensajeCrearCuenta);
-	contenedorForm.append(formularioCrearCuenta);
+	contenedorForm.append(formularioCrearCuenta(update));
 };
 
-const CrearUsuario = ()=>{
+const CrearUsuario = (update)=>{
 	const div = $("<div></div>");
 	const divMensaje = $("<div></div>");
 	const img = $("<img src='img/icons/message.png' alt='sms'/>");
-	const p = $("<p>Enviamos un SMS con el codigo de validacion al numero <strong>"+state.usuario.phone+"</strong></p>");
+	const p = $("<p>Enviamos un SMS con el codigo de validacion al numero <strong>"+state.code.phone+"</strong></p>");
 	const h2 = $("<h2>Ahora ingresa tu código</h2>");
 	const divFormulario = $("<div></div>");
 	const formValidarCode = $("<form></form>");
@@ -116,8 +118,11 @@ const CrearUsuario = ()=>{
 	
 
 	const validarCode = (input)=>{
-		(input.val().trim() == state.code) ? true : false
-		
+		if(input.val() == state.code.code){
+			return true;
+		}else{
+			return false;
+		}		
 	};
 
 	const disminuirCronometro = ()=>{
@@ -127,17 +132,21 @@ const CrearUsuario = ()=>{
 	        clearInterval(cronometro);
 	    }  
 	}
-
-  
+  	//activar temporizador
    	var cronometro = setInterval(disminuirCronometro,1000);  
-  
+  	//generar nuevo codigo
 	setTimeout(function(){
 		if(!validarCode(input)){
-		    $.post("/api/resendCode",{phone:state.usuario.phone},(json)=>{
+		   /* $.post("/api/resendCode",{phone:state.code.phone},(json)=>{
 		    	console.log(json);
-		    	state.code = json.data;
-		    	state.usuario.code = json.data;
-		    });
+		    	state.code.code = json.data;
+		    	
+		    });*/
+		    refrescarCodigo((error, data)=>{
+		    	if(error) console.log(error.message);
+		    	state.code.code = data;
+
+		    }, {phone:state.code.phone});
 		}
 
 	},21000);
@@ -146,7 +155,7 @@ const CrearUsuario = ()=>{
 		console.log(input.val());
 		if(validarCode(input)){
 			console.log("saltar a CrearUsuario");
-			reRenderUsuario(divMensaje, divFormulario);
+			reRenderUsuario(divMensaje, divFormulario, update);
 		}
 	});
 
