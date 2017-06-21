@@ -27,6 +27,12 @@ const registrarTelefono = ()=>{
 	form.append(span);
 	form.append(divButton);
 
+	input.on("keyup", (e)=>{
+		if(input.val().length == 9){
+			input.blur();
+		}
+	});
+
 	form.on("change",(e)=> {
 		console.log(input.val());
 		if(input.val().length ==9 && check.prop("checked")){
