@@ -43,12 +43,20 @@ const registrarTelefono = (update)=>{
 
 	form.on("submit",(e)=>{
 		e.preventDefault();
-		$.post("/api/registerNumber",{phone:input.val(),terms:true},(json)=>{
+		/*$.post("/api/registerNumber",{phone:input.val(),terms:true},(json)=>{
 			console.log(json.message);
-			console.log(json.data);
-			state.data = json.data;
+			
+			state.usuario = json.data;
+			state.code = json.data.code;
 			update();
-		});
+		});*/
+		registrarCelular((error,data)=>{
+			if(error) console.log(error.message);	
+
+				state.usuario = data;
+				state.code = data.code;
+
+		}, {phone:input.val(),terms:true});
 	});
 
 	divContenido.append(divMensaje);

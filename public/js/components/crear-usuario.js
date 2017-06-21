@@ -16,53 +16,60 @@ const formularioCrearCuenta = ()=>{
 	const formCrearCuenta = $("<form></form>");
 	const divInputNombre = $("<div class='border-botton mv-14px'></div>");
 	const iconNombre = $("<i class='icon user'></i>");
-	const inputNombre = $("<input id='nombre' type='text'>");
+	const inputNombre = $("<input id='nombre' type='text' placeholder='Nombre'>");
 	const divInputEmail = $("<div class='border-botton mv-14px'></div>");
 	const iconEmail = $("<i class='icon message'></i>");
 	const inputEmail = $("<input id='email' type='text'>");
 	const errorEmail = $("<span class='error'>");
-	const divInputCode = $("<div class='border-botton mv-14px'></div>");
-	const iconCode = $("<i class='icon lock'></i>");
-	const inputCode = $("<input id='code' type='text'>");
-	const errorCode = $("<span class='error'>");
+	const divInputPassword = $("<div class='border-botton mv-14px'></div>");
+	const iconPasword = $("<i class='icon lock'></i>");
+	const inputPasword = $("<input id='password' type='text'>");
+	const errorPasword = $("<span class='error'>");
 	const mensaje = $("<p>Cuida esta clave como oro , es tu acceso a Yape.</p>");
 	const btnCrearCuenta = $("<button>Crear Cuenta</button>");
 	btnCrearCuenta.attr('disabled', true);
 	let cont = 0;
-	const validarInput = (input)=>{
-		if(input.val() !=null && input.val()!= undefined && input.val().trim() != ""){
-			return true;
-		}else{
-			return false;
-		}
-	};
+	
+	inputNombre.on("keypress", soloLetras);
 
 	formCrearCuenta.on("keyup", (e)=>{		
-		if(validarInput(inputNombre) && validarInput(inputEmail) && validarInput(inputCode)){
+		if(validarInput(inputNombre) && validarInput(inputEmail) && validarInput(inputPasword)){
 			btnCrearCuenta.attr('disabled', false);
 		}else{
 			btnCrearCuenta.attr('disabled', true);
 		}
 	});
-
+	//click CREAR CUENTA
 	formCrearCuenta.on("submit",(e)=>{
 		e.preventDefault();
-		if (/([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})/gi.test(inputEmail.val())) {
-	     errorEmail.text("bien");
-	     cont++;
+		if (validarEmail(inputEmail.val())){
+	    	errorEmail.text("");
+	     	cont++;
 	    } else {
-	      errorEmail.text("mal email");
+	     	errorEmail.text("formato: email@dominio.com");
 	    }
 
-	    if(inputCode.val() == state.data.code){
-	    	errorCode.text("bien");
+	    if(inputPasword.val().length >= 6){
+	    	errorPasword.text("");
 	    	cont++;
 	    }else{
-	      	errorCode.text("mal codigo");
+	      	errorPasword.text("debe contener 6 digitos");
 	    }
-	      	console.log(cont);
-	    if(cont ==2){
+	    //si email y el password son correctos
+	    console.log(cont);
+	    if(cont == 2){
 	    	console.log("enviar Api");
+	    	let objUsuario = {  phone: state.usuario.phone,
+			    				name: inputNombre.val(),
+			    				email: inputEmail.val(),
+			    				password: inputPasword.val()
+			    			 }
+
+	    	$.post("/api/createUser", objUsuario,(json)=>{
+	    		state.usuario = json.data;
+	    		console.log(state.usuario);
+	    	});
+
 	    }else{
 	    	console.log("modificar errores");
 	    }
@@ -72,14 +79,14 @@ const formularioCrearCuenta = ()=>{
 	divInputNombre.append(inputNombre);
 	divInputEmail.append(iconEmail);
 	divInputEmail.append(inputEmail);
-	divInputCode.append(iconCode);
-	divInputCode.append(inputCode);
+	divInputPassword.append(iconPasword);
+	divInputPassword.append(inputPasword);
 
 	formCrearCuenta.append(divInputNombre);
 	formCrearCuenta.append(divInputEmail);
 	formCrearCuenta.append(errorEmail);
-	formCrearCuenta.append(divInputCode);
-	formCrearCuenta.append(errorCode);
+	formCrearCuenta.append(divInputPassword);
+	formCrearCuenta.append(errorPasword);
 	formCrearCuenta.append(btnCrearCuenta);
 	
 	return formCrearCuenta;
@@ -97,35 +104,68 @@ const CrearUsuario = ()=>{
 	const div = $("<div></div>");
 	const divMensaje = $("<div></div>");
 	const img = $("<img src='img/icons/message.png' alt='sms'/>");
-	const p = $("<p>Enviamos un SMS con el codigo de validacion al numero <strong>"+state.data.phone+"</strong></p>");
+	const p = $("<p>Enviamos un SMS con el codigo de validacion al numero <strong>"+state.usuario.phone+"</strong></p>");
 	const h2 = $("<h2>Ahora ingresa tu código</h2>");
 	const divFormulario = $("<div></div>");
-	const form = $("<form></form>");
+	const formValidarCode = $("<form></form>");
 	const divInput = $("<div class='border-botton mv-14px'></div>");
 	const icon = $("<i class='icon lock'></i>");
 	const input = $("<input type='text'>");
-	const mensaje = $("<p>Reintentar en <i class='icon clock'></i><span id='contador'><span><p>");
+	const error = $("<span class='error'></span>");
+	const mensaje = $("<p>Reintentar en <i class='icon clock'></i><span id='temporizador'>21<span><p>");
+	
 
-	input.on("keyup", (e)=>{
+	const validarCode = (input)=>{
+		(input.val().trim() == state.code) ? true : false
+		
+	};
+
+	const disminuirCronometro = ()=>{
+	    if($("#temporizador").text() > 0) {	   
+	        $("#temporizador").text($("#temporizador").text()-1);
+	    } else {
+	        clearInterval(cronometro);
+	    }  
+	}
+
+  
+   	var cronometro = setInterval(disminuirCronometro,1000);  
+  
+	setTimeout(function(){
+		if(!validarCode(input)){
+		    $.post("/api/resendCode",{phone:state.usuario.phone},(json)=>{
+		    	console.log(json);
+		    	state.code = json.data;
+		    	state.usuario.code = json.data;
+		    });
+		}
+
+	},21000);
+
+	formValidarCode.on("keyup", (e)=>{
 		console.log(input.val());
-		if(input.val().trim() == state.data.code){
-			console.log("saltar a la otra pagina");
+		if(validarCode(input)){
+			console.log("saltar a CrearUsuario");
 			reRenderUsuario(divMensaje, divFormulario);
 		}
 	});
 
+
+		
 	divMensaje.append(img);
 	divMensaje.append(h2);
 	divMensaje.append(p);
 
 	divInput.append(icon);
 	divInput.append(input);
-	form.append(divInput);
-	form.append(mensaje);
-	divFormulario.append(form);
+	formValidarCode.append(divInput);
+	formValidarCode.append(error);
+	formValidarCode.append(mensaje);
+	divFormulario.append(formValidarCode);
 
 	div.append(divMensaje);
 	div.append(divFormulario);
 
 	return div;
 };
+
