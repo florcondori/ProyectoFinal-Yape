@@ -135,7 +135,7 @@ const CrearUsuario = (update)=>{
 	    refrescarCodigo((error, data)=>{
 	    	if(error) console.log(error.message);
 	    	state.code.code = data;
-
+	    	console.log(data);
 	    }, {phone:state.code.phone});		
 
 	},22000);
