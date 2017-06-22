@@ -19,6 +19,7 @@ const render = (root)=>{
 }
 
 const state = {
+	completed: null,
 	datosTarjeta: null,
 	usuario: null,
 	code: null

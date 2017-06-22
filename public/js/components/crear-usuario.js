@@ -19,17 +19,14 @@ const formularioCrearCuenta = (update)=>{
 	const inputNombre = $("<input id='nombre' type='text' placeholder='Nombre'>");
 	const divInputEmail = $("<div class='border-botton mv-14px'></div>");
 	const iconEmail = $("<i class='icon message'></i>");
-	const inputEmail = $("<input id='email' type='text'>");
-	const errorEmail = $("<span class='error'>");
+	const inputEmail = $("<input id='email' type='text' placeholder='email@dominio.com.pe'>");
 	const divInputPassword = $("<div class='border-botton mv-14px'></div>");
 	const iconPasword = $("<i class='icon lock'></i>");
-	const inputPasword = $("<input id='password' type='text'>");
-	const errorPasword = $("<span class='error'>");
+	const inputPasword = $("<input id='password' type='password'placeholder='Ingresa clave de 6 digitos'>");
 	const mensaje = $("<p>Cuida esta clave como oro , es tu acceso a Yape.</p>");
 	const btnCrearCuenta = $("<button>Crear Cuenta</button>");
 	btnCrearCuenta.attr('disabled', true);
-	let cont = 0;
-	
+		
 	inputNombre.on("keypress", soloLetras);
 
 	formCrearCuenta.on("keyup", (e)=>{		
@@ -40,24 +37,21 @@ const formularioCrearCuenta = (update)=>{
 		}
 	});
 	//click CREAR CUENTA
-	formCrearCuenta.on("submit",(e)=>{
+	formCrearCuenta.on("submit",(e)=>{update
 		e.preventDefault();
 		if (validarEmail(inputEmail.val())){
-	    	errorEmail.text("");
-	     	cont++;
+	    	divInputEmail.removeClass("border-red");
 	    } else{
-	     	errorEmail.text("formato: email@dominio.com.pe");
+	     	divInputEmail.addClass("border-red");
 	    }
 
 	    if(inputPasword.val().length >= 6){
-	    	errorPasword.text("");
-	    	cont++;
+	    	divInputPassword.removeClass("border-red");
 	    }else{
-	      	errorPasword.text("debe contener 6 digitos");
+	      	divInputPassword.addClass("border-red");
 	    }
 	    //si email y el password son correctos
-	    console.log(cont);
-	    if(cont == 2){
+	    if(validarEmail(inputEmail.val()) && inputPasword.val().length >= 6){
 	    	console.log("enviar Api");
 	    	let objUsuario = {  phone: state.code.phone,
 			    				name: inputNombre.val(),
@@ -69,13 +63,12 @@ const formularioCrearCuenta = (update)=>{
 	    		if(error) console.log(error.message);
 
 	    		state.usuario = data;
-	    		console.log(state.usuario);
 	    		update();
 
 	    	}, objUsuario);
 
 	    }else{
-	    	console.log("modificar errores");
+	    	console.log("llenar bien los datos");
 	    }
 	});
 
@@ -88,10 +81,9 @@ const formularioCrearCuenta = (update)=>{
 
 	formCrearCuenta.append(divInputNombre);
 	formCrearCuenta.append(divInputEmail);
-	formCrearCuenta.append(errorEmail);
 	formCrearCuenta.append(divInputPassword);
-	formCrearCuenta.append(errorPasword);
 	formCrearCuenta.append(btnCrearCuenta);
+	formCrearCuenta.append(mensaje);
 	
 	return formCrearCuenta;
 };
@@ -127,7 +119,6 @@ const CrearUsuario = (update)=>{
 	}
 
 	formValidarCode.on("keyup", (e)=>{
-		console.log($(e.target));
 		if(input.val() == state.code.code){
 			console.log("saltar a CrearUsuario");
 			clearInterval(cronometro);

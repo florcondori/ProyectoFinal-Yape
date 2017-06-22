@@ -38,15 +38,34 @@ const validarEmail = (email)=>{
 }
 
 const solo16Digitos = (e)=>{
-	if($(e.target).val().length == 16){
+	let code = e.which;
+	if(code>=48 && code<=57 && $(e.target).val().length < 16){
+		return true;
+	}else{
 		return false;
 	}
 };
 
 const solo2Digitos = (e)=>{
-	console.log($(e.target));
-	
-	if($(e.target).val().length == 2){
+	let code = e.which;	
+	if(code>=48 && code<=57 && $(e.target).val().length <2){
+		return true;
+	}else{
 		return false;
 	}
 }; 
+
+const solo9Digitos = (e)=>{
+	let code = e.which;	
+	if(code>=48 && code<=57 && $(e.target).val().length <9){
+		return true;
+	}else{
+		return false;
+	}
+};
+
+const llenarCero = (e)=>{
+	if($(e.target).val()<10 && $(e.target).val().length == 1){
+		$(e.target).val("0"+$(e.target).val());
+	}
+}

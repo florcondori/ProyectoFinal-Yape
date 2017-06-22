@@ -12,7 +12,7 @@ const mensajeRegistrarTarjeta = ()=>{
 	return div;
 };
 
-const formRegistrarTarjeta = ()=>{
+const formRegistrarTarjeta = (div)=>{
 	const formRegistrarTarjeta = $("<form></form>");
 	const divInputTarjeta = $("<div class='border-botton mv-14px'></div>");
 	const iconTarjeta = $("<i class='icon card'></i>");
@@ -25,12 +25,10 @@ const formRegistrarTarjeta = ()=>{
 	const btnContinuar = $("<button>continuar</button>");
 	btnContinuar.attr('disabled', true);
 
-	let inputValido = 0;
 	inputTarjeta.on("keypress", solo16Digitos);
-
 	inputMes.on("keypress", solo2Digitos);
-
 	inputAnio.on("keypress", solo2Digitos);
+	inputMes.on("blur", llenarCero);
 
 	formRegistrarTarjeta.on("keyup", (e)=>{
 		if(validarInput(inputTarjeta) && validarInput(inputMes) && validarInput(inputAnio)){
@@ -45,26 +43,17 @@ const formRegistrarTarjeta = ()=>{
 
 		if(inputTarjeta.val().length == 16){
 			divInputTarjeta.removeClass("border-red");
-			inputValido++;
 		}else{
 			divInputTarjeta.addClass("border-red");	
 		}
 
-		if(inputMes.val()>= 1 && inputMes.val()<=12){
-			inputMes.removeClass("border-red");
-			inputValido++;
-		}else{
-			inputMes.addClass("border-red");	
-		}
-
 		if(inputAnio.val()>= 17 && inputAnio.val()<=24){
 			inputAnio.removeClass("border-red");
-			inputValido++;
 		}else{
 			inputAnio.addClass("border-red");	
 		}
-
-		if(inputValido == 3){
+		
+		if(inputTarjeta.val().length == 16 && inputMes.val()<=12 && inputAnio.val()>= 17 && inputAnio.val()<=24){
 			console.log("guardando datos");
 			state.datosTarjeta = {	card: inputTarjeta.val() ,
 									mes: inputMes.val() ,
@@ -93,18 +82,23 @@ const formRegistrarTarjeta = ()=>{
 
 const reRenderTarjeta = (div)=>{
 	div.empty();
-	if(state.datosTarjeta == null){
+	if(state.datosTarjeta == null  && state.completed == null){
 		div.append(mensajeRegistrarTarjeta);
 		div.append(formRegistrarTarjeta(div));
-	}else{
-		div.append(formFinal);
+	}
+	if(state.datosTarjeta != null  && state.completed == null){
+		div.append(mensajeFormFinal);
+		div.append(formFinal(div));
+	}
+	if(state.datosTarjeta != null  && state.completed != null){
+		div.append(pantallaFinal);
 	}
 	
 };
 
 const RegistrarCard = ()=>{
 	const div = $("<div></div>");
-	const divBg = $("<div class='bg-yellow height100'></div>");
+	const divBg = $("<div class='flex-align-center bg-yellow height100'></div>");
 	const icon = $("<i class='icon check'></i>");	
 	const h2 = $("<h2>!BIEN¡<br>Ahora puedes usar Yape</h2>");
 

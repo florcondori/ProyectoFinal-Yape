@@ -27,15 +27,15 @@ const registrarTelefono = (update)=>{
 	form.append(span);
 	form.append(divButton);
 
-	input.on("keypress", soloNumeros);
+	input.on("keypress", solo9Digitos);
 	input.on("keyup", (e)=>{
-		if(input.val().length ==9){
+		if($(e.target).val().length ==9){
 			input.blur();			
 		}
 	});
 
 	form.on("change",(e)=> {
-		if(validarInput(input) && check.prop("checked")){
+		if(input.val().length == 9 && check.prop("checked")){
 			button.attr('disabled', false);
 		}else{
 			button.attr('disabled', true);
@@ -46,10 +46,12 @@ const registrarTelefono = (update)=>{
 		e.preventDefault();
 		
 		registrarCelular((error,data)=>{
-			if(error) console.log(error.message);	
-
+			if(error){
+				console.log(error.message);
+			} else{
 				state.code = data;
 				update();
+			}					
 
 		}, {phone:input.val(),terms:true});
 	});

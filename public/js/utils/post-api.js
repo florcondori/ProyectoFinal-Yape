@@ -1,6 +1,10 @@
 'use strict';
-const registrarTarjeta = ()=>{
-	
+const registrarTarjeta = (callback, obj)=>{
+	$.post("/api/registerCard",obj,(json)=>{
+		if(!json.success) callback(new Error(json.message));
+
+		callback(null, json.data);
+	});
 };
 
 const crearUsuario = (callback, obj)=>{

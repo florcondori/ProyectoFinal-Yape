@@ -76,6 +76,12 @@ form a{
 .card{
 	background-image: url("../img/icons/card.png");
 }
+.send{
+	background-image: url("../img/icons/send.png");
+}
+.code-qr{
+	background-image: url("../img/icons/code-qr.png");
+}
 .error{
 	color: red;
 }
@@ -114,4 +120,25 @@ form a{
 }
 .border-red{
 	border-color: red;
+}
+.bg-purple-ligth{
+	background-color: #451e36;
+}
+.bg-purple-dark{
+	background-color: #38052a;
+}
+.flex-between{
+	display: flex;
+	justify-content: space-between;
+}
+.flex-align-center{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.height40{
+	height: 40vh;
+}
+.height60{
+	height: 60vh
 }
