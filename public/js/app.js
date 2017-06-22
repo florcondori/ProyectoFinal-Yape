@@ -14,7 +14,7 @@ const render = (root)=>{
 	if(state.usuario !== null){
 		wrapper.append(RegistrarCard());
 	}
-
+	
 	root.append(wrapper);
 }
 

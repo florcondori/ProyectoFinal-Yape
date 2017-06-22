@@ -46,7 +46,7 @@ const formularioCrearCuenta = (update)=>{
 	    	errorEmail.text("");
 	     	cont++;
 	    } else {
-	     	errorEmail.text("formato: email@dominio.com");
+	     	errorEmail.text("formato: email@dominio.com.pe");
 	    }
 
 	    if(inputPasword.val().length >= 6){
@@ -137,11 +137,7 @@ const CrearUsuario = (update)=>{
   	//generar nuevo codigo
 	setTimeout(function(){
 		if(!validarCode(input)){
-		   /* $.post("/api/resendCode",{phone:state.code.phone},(json)=>{
-		    	console.log(json);
-		    	state.code.code = json.data;
-		    	
-		    });*/
+		   
 		    refrescarCodigo((error, data)=>{
 		    	if(error) console.log(error.message);
 		    	state.code.code = data;

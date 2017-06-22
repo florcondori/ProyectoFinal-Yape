@@ -73,6 +73,9 @@ form a{
 .check{
 	background-image: url("../img/icons/check.png");
 }
+.card{
+	background-image: url("../img/icons/card.png");
+}
 .error{
 	color: red;
 }
@@ -105,4 +108,10 @@ form a{
 }
 .height100{
 	height: 100vh;
+}
+.width-35{
+	width: 35px;
+}
+.border-red{
+	border-color: red;
 }
