@@ -27,14 +27,15 @@ const registrarTelefono = (update)=>{
 	form.append(span);
 	form.append(divButton);
 
+	input.on("keypress", soloNumeros);
 	input.on("keyup", (e)=>{
-		if(input.val().length == 9){
-			input.blur();
+		if(input.val().length ==9){
+			input.blur();			
 		}
 	});
 
 	form.on("change",(e)=> {
-		if(input.val().length ==9 && check.prop("checked")){
+		if(validarInput(input) && check.prop("checked")){
 			button.attr('disabled', false);
 		}else{
 			button.attr('disabled', true);

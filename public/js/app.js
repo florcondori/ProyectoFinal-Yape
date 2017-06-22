@@ -4,7 +4,7 @@ const render = (root)=>{
 
 	const wrapper = $("<div class='wrapper'></div>");
 
-	if(state.code === null && state.usuario === null){
+	if(state.code === null){
 		wrapper.append(SliderRegistro(_ => render(root)));
 	}
 	if(state.code !== null && state.usuario === null){
@@ -19,6 +19,7 @@ const render = (root)=>{
 }
 
 const state = {
+	datosTarjeta: null,
 	usuario: null,
 	code: null
 };

@@ -12,7 +12,11 @@ const soloLetras = (e)=>{
 
 const soloNumeros = (e)=>{
 	let code = e.which;
-	(code>=48 && code<=57) ? true : false
+	if(code>=48 && code<=57){
+		return true;
+	}else{
+		return false;
+	}
 	
 };
 
@@ -25,7 +29,11 @@ const validarInput = (input)=>{
 };
 
 const validarEmail = (email)=>{
-	(/([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})/gi.test(email)) ? true : false
+	if(/([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})/gi.test(email)){
+		return true;
+	}else{
+		return false;
+	}
     
 }
 
@@ -37,8 +45,8 @@ const solo16Digitos = (e)=>{
 
 const solo2Digitos = (e)=>{
 	console.log($(e.target));
+	
 	if($(e.target).val().length == 2){
 		return false;
-		$(e.target).blur();
 	}
 }; 

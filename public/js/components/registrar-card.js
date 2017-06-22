@@ -24,20 +24,15 @@ const formRegistrarTarjeta = ()=>{
 	const inputAnio = $("<input class='width-35 border-botton' placeholder='Año' type='text'/>");
 	const btnContinuar = $("<button>continuar</button>");
 	btnContinuar.attr('disabled', true);
+
 	let inputValido = 0;
 	inputTarjeta.on("keypress", solo16Digitos);
 
 	inputMes.on("keypress", solo2Digitos);
 
-	inputAnio.on("keypress", (e)=>{
-		console.log($(e.target).val());
-		if($(e.target).val().length == 2){
-			return false;
-			inputAnio.blur();
-		}
-	});
+	inputAnio.on("keypress", solo2Digitos);
 
-	formRegistrarTarjeta.on("keyup", ()=>{
+	formRegistrarTarjeta.on("keyup", (e)=>{
 		if(validarInput(inputTarjeta) && validarInput(inputMes) && validarInput(inputAnio)){
 			btnContinuar.attr('disabled', false);
 		}else{
@@ -47,6 +42,7 @@ const formRegistrarTarjeta = ()=>{
 
 	formRegistrarTarjeta.on("submit", (e)=>{
 		e.preventDefault();
+
 		if(inputTarjeta.val().length == 16){
 			divInputTarjeta.removeClass("border-red");
 			inputValido++;
@@ -54,14 +50,14 @@ const formRegistrarTarjeta = ()=>{
 			divInputTarjeta.addClass("border-red");	
 		}
 
-		if(inputMes.val()>= 1 && inputTarjeta.val()<=12){
+		if(inputMes.val()>= 1 && inputMes.val()<=12){
 			inputMes.removeClass("border-red");
 			inputValido++;
 		}else{
 			inputMes.addClass("border-red");	
 		}
 
-		if(inputAnio.val()>= 17 && inputTarjeta.val()<=24){
+		if(inputAnio.val()>= 17 && inputAnio.val()<=24){
 			inputAnio.removeClass("border-red");
 			inputValido++;
 		}else{
@@ -70,6 +66,11 @@ const formRegistrarTarjeta = ()=>{
 
 		if(inputValido == 3){
 			console.log("guardando datos");
+			state.datosTarjeta = {	card: inputTarjeta.val() ,
+									mes: inputMes.val() ,
+									anio: inputAnio.val()};
+
+			reRenderTarjeta(div);
 		}else{
 			console.log("llenar bien los datos");
 		}
@@ -92,8 +93,13 @@ const formRegistrarTarjeta = ()=>{
 
 const reRenderTarjeta = (div)=>{
 	div.empty();
-	div.append(mensajeRegistrarTarjeta);
-	div.append(formRegistrarTarjeta);
+	if(state.datosTarjeta == null){
+		div.append(mensajeRegistrarTarjeta);
+		div.append(formRegistrarTarjeta(div));
+	}else{
+		div.append(formFinal);
+	}
+	
 };
 
 const RegistrarCard = ()=>{

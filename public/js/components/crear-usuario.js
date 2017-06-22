@@ -45,7 +45,7 @@ const formularioCrearCuenta = (update)=>{
 		if (validarEmail(inputEmail.val())){
 	    	errorEmail.text("");
 	     	cont++;
-	    } else {
+	    } else{
 	     	errorEmail.text("formato: email@dominio.com.pe");
 	    }
 
@@ -65,12 +65,14 @@ const formularioCrearCuenta = (update)=>{
 			    				password: inputPasword.val()
 			    			 }
 
-	    	$.post("/api/createUser", objUsuario,(json)=>{
-	    		state.usuario = json.data;
-	    		console.log(state.usuario);
+	    	crearUsuario((error, data)=>{
+	    		if(error) console.log(error.message);
 
+	    		state.usuario = data;
+	    		console.log(state.usuario);
 	    		update();
-	    	});
+
+	    	}, objUsuario);
 
 	    }else{
 	    	console.log("modificar errores");
@@ -116,45 +118,36 @@ const CrearUsuario = (update)=>{
 	const error = $("<span class='error'></span>");
 	const mensaje = $("<p>Reintentar en <i class='icon clock'></i><span id='temporizador'>21<span><p>");
 	
-
-	const validarCode = (input)=>{
-		if(input.val() == state.code.code){
-			return true;
-		}else{
-			return false;
-		}		
-	};
-
 	const disminuirCronometro = ()=>{
 	    if($("#temporizador").text() > 0) {	   
-	        $("#temporizador").text($("#temporizador").text()-1);
+	        $("#temporizador").text(eval($("#temporizador").text())-1);
 	    } else {
-	        clearInterval(cronometro);
+	        $("#temporizador").text(21);
 	    }  
 	}
-  	//activar temporizador
-   	var cronometro = setInterval(disminuirCronometro,1000);  
-  	//generar nuevo codigo
-	setTimeout(function(){
-		if(!validarCode(input)){
-		   
-		    refrescarCodigo((error, data)=>{
-		    	if(error) console.log(error.message);
-		    	state.code.code = data;
-
-		    }, {phone:state.code.phone});
-		}
-
-	},21000);
 
 	formValidarCode.on("keyup", (e)=>{
-		console.log(input.val());
-		if(validarCode(input)){
+		console.log($(e.target));
+		if(input.val() == state.code.code){
 			console.log("saltar a CrearUsuario");
+			clearInterval(cronometro);
+			clearInterval(refreshCode);
 			reRenderUsuario(divMensaje, divFormulario, update);
 		}
 	});
+	
+  	//activar temporizador
+   	var cronometro = setInterval(disminuirCronometro,1000);  
+  	//generar nuevo codigo
+	var refreshCode = setInterval(function(){		  
+	  
+	    refrescarCodigo((error, data)=>{
+	    	if(error) console.log(error.message);
+	    	state.code.code = data;
 
+	    }, {phone:state.code.phone});		
+
+	},22000);
 
 		
 	divMensaje.append(img);
