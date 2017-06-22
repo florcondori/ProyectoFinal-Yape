@@ -22,24 +22,16 @@ const formRegistrarTarjeta = ()=>{
 	const inputMes = $("<input class='width-35 border-botton' placeholder='Mes' type='text'/>");
 	const span = $("<span>/<span>");
 	const inputAnio = $("<input class='width-35 border-botton' placeholder='Año' type='text'/>");
-	const btnContinuar = $("<button>continuar</button");
+	const btnContinuar = $("<button>continuar</button>");
 	btnContinuar.attr('disabled', true);
 	let inputValido = 0;
-	inputTarjeta.on("keypress", ()=>{
-		if(inputTarjeta.val().length == 16){
-			return false;
-		}
-	});
-	inputMes.on("keypress", (e)=>{
-		console.log(e.target);
-		if(inputMes.val().length == 2){
-			return false;
-			inputAnio.focus();
-		}
-	});
+	inputTarjeta.on("keypress", solo16Digitos);
+
+	inputMes.on("keypress", solo2Digitos);
+
 	inputAnio.on("keypress", (e)=>{
-		console.log(e.target);
-		if(inputAnio.val().length == 2){
+		console.log($(e.target).val());
+		if($(e.target).val().length == 2){
 			return false;
 			inputAnio.blur();
 		}
@@ -56,10 +48,10 @@ const formRegistrarTarjeta = ()=>{
 	formRegistrarTarjeta.on("submit", (e)=>{
 		e.preventDefault();
 		if(inputTarjeta.val().length == 16){
-			inputTarjeta.removeClass("border-red");
+			divInputTarjeta.removeClass("border-red");
 			inputValido++;
 		}else{
-			inputTarjeta.addClass("border-red");	
+			divInputTarjeta.addClass("border-red");	
 		}
 
 		if(inputMes.val()>= 1 && inputTarjeta.val()<=12){

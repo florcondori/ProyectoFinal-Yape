@@ -28,3 +28,17 @@ const validarEmail = (email)=>{
 	(/([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})/gi.test(email)) ? true : false
     
 }
+
+const solo16Digitos = (e)=>{
+	if($(e.target).val().length == 16){
+		return false;
+	}
+};
+
+const solo2Digitos = (e)=>{
+	console.log($(e.target));
+	if($(e.target).val().length == 2){
+		return false;
+		$(e.target).blur();
+	}
+}; 
