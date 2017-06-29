@@ -8,11 +8,13 @@ const registrarTelefono = (update)=>{
 	const form = $("<form></form>");
 	const divInput = $("<div class='border-botton'></div>");
 	const icon = $("<i class='icon phoneandnumber'></i>");
-	const input = $("<input id='phone' type='text'>");
+	const inputTelefono = $("<input id='phone' type='text'>");
 	const check = $("<input type='checkbox'>");
 	const span = $("<span>Acepto los <a href='#'>Terminos y condiciones</a></span>");
 	const divButton = $("<div class='flex-center mt-5rem'></div>");
 	const button = $("<button>Continuar</button>");
+	const mensajeError = $("<p class='error'></p>");
+	mensajeError.hide();
 	button.attr('disabled', true);
 	
 	divMensaje.append(img);
@@ -20,26 +22,48 @@ const registrarTelefono = (update)=>{
 	divMensaje.append(p);
 
 	divInput.append(icon);
-	divInput.append(input);
+	divInput.append(inputTelefono);
 	divButton.append(button);
 	form.append(divInput);
 	form.append(check);
 	form.append(span);
 	form.append(divButton);
+	form.append(mensajeError);
 
-	input.on("keypress", solo9Digitos);
-	input.on("keyup", (e)=>{
-		if($(e.target).val().length ==9){
-			input.blur();			
+	let validatePhone = false,
+		validateTerms= false;
+
+	inputTelefono.on({
+		keypress: solo9Digitos,
+		keyup: (e)=>{
+			if($(e.target).val().length ==9){
+				validatePhone = true;
+			}else{
+				validatePhone = false;
+			}
+			console.log(validatePhone);
 		}
 	});
-
-	form.on("change",(e)=> {
-		if(input.val().length == 9 && check.prop("checked")){
-			button.attr('disabled', false);
+	
+	check.on("click",(e)=> {
+		if(check.prop("checked")){
+			validateTerms= true;
 		}else{
-			button.attr('disabled', true);
+			validateTerms = false;
 		}
+	});	
+	/*if(validatePhone && validateTerms){
+		button.attr('disabled', false);
+	}else{
+		button.attr('disabled', true);
+	}*/
+	form.on("change",(e)=> {
+		console.log(validateTerms, validatePhone);
+		if(validatePhone && validateTerms){
+		button.attr('disabled', false);
+	}else{
+		button.attr('disabled', true);
+	}
 	});
 
 	form.on("submit",(e)=>{
@@ -48,6 +72,8 @@ const registrarTelefono = (update)=>{
 		registrarCelular((error,data)=>{
 			if(error){
 				console.log(error.message);
+				mensajeError.show();
+				mensajeError.text(error.message);
 			} else{
 				console.log(data);
 				state.code = data.code;
@@ -56,7 +82,7 @@ const registrarTelefono = (update)=>{
 				update();
 			}					
 
-		}, {phone:input.val(),terms:true});
+		}, {phone:inputTelefono.val(),terms:true});
 	});
 
 	divContenido.append(divMensaje);
