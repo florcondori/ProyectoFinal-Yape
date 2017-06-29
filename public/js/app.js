@@ -4,25 +4,21 @@ const render = (root)=>{
 
 	const wrapper = $("<div class='wrapper'></div>");
 
-	if(state.code === null){
-		wrapper.append(SliderRegistro(_ => render(root)));
-	}
-	if(state.code !== null && state.usuario === null){
-		wrapper.append(CrearUsuario(_ => render(root)));
-	}
-
-	if(state.usuario !== null){
-		wrapper.append(RegistrarCard());
-	}
+	wrapper.append(state.page(_ => render(root)));
 	
 	root.append(wrapper);
 }
 
 const state = {
-	completed: null,
-	datosTarjeta: null,
-	usuario: null,
-	code: null
+	page: slider,
+	telefono: null,
+	code: null,
+	nombre: null,
+	email: null,
+	tarjeta: null,
+	mes: null,
+	anio: null,
+	clave: null	
 };
 
 $(_=>{

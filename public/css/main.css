@@ -4,10 +4,6 @@
 	margin: 0;
 	font-family: 'Roboto' !important;
 }
-body{
-	width: 80%;
-	margin: 0 auto;
-}
 a{
 	text-decoration: none; 
 }
@@ -15,7 +11,7 @@ p{
 	line-height: 1.5;
 }
 img{
-	width: 200px;
+	width: 150px;
 	height: auto;
 }
 input{
@@ -38,6 +34,10 @@ button[disabled='disabled']{
 }
 form a{
 	color: #00c3a3;
+}
+form div{
+	margin-bottom: 14px;
+    margin-top: 25px;
 }
 .border-botton{
 	border-bottom: 1px solid gray;
@@ -72,6 +72,8 @@ form a{
 }
 .check{
 	background-image: url("../img/icons/check.png");
+	height: 120px;
+	width: 120px;
 }
 .card{
 	background-image: url("../img/icons/card.png");
@@ -85,7 +87,14 @@ form a{
 .error{
 	color: red;
 }
+.icon-mediano{
+	width: 50px;
+	height: 50px;
+}
 /*reutilizables*/
+.text-white{
+	color: white;
+}
 .text-center{
 	text-align: center;
 }
@@ -94,6 +103,9 @@ form a{
 }
 .mt-5rem{
 	margin-top: 5rem;
+}
+.mt-3rem{
+	margin-top: 3rem;
 }
 .mv-14px{
 	margin-bottom: 14px;
@@ -127,13 +139,18 @@ form a{
 .bg-purple-dark{
 	background-color: #38052a;
 }
-.flex-between{
+.flex-around{
 	display: flex;
-	justify-content: space-between;
+	justify-content: space-around;
+}
+.flex-column-center{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 .flex-align-center{
 	display: flex;
-	justify-content: center;
 	align-items: center;
 }
 .height40{
@@ -141,4 +158,17 @@ form a{
 }
 .height60{
 	height: 60vh
+}
+.container{
+	width: 80%;
+	margin: 0 auto;
+}
+.bg-purple-ligth img{
+	width: 120px;
+}
+.p-14px{
+	padding: 14px;
+}
+.owl-theme .owl-dots .owl-dot.active span{
+	background-color: #F64552;
 }

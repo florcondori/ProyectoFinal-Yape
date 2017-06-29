@@ -1,18 +1,10 @@
 'use strict';
-const mensajeRegistrarTarjeta = ()=>{
-	const div = $("<div></div>");
-	const img = $("<img src='img/icons/bcp-logo.png' alt='tarjeta'/>");
-	const h2 = $("<h2>Registrar tu tarjeta débito BCP</h2>");
-	const p = $("<p>Por ahora solo aceptamos cuentas de ahorro y/o corriente en soles</p>");
-	
-	div.append(img);
-	div.append(h2);
-	div.append(p);
-
-	return div;
-};
-
-const formRegistrarTarjeta = (div)=>{
+const registrarCard = (update)=>{
+	const registrarCard = $("<div class='container'></div>");
+	const div = $("<div class='text-center mb-2rem pb-2rem'></div>");
+	const img = $("<img class='mt-5rem' src='img/icons/bcp-logo.png' alt='tarjeta'/>");
+	const h2 = $("<h2 class='mv-14px'>Registrar tu tarjeta débito BCP</h2>");
+	const p = $("<p class='fs-14'>Por ahora solo aceptamos cuentas de ahorro y/o corriente en soles</p>");
 	const formRegistrarTarjeta = $("<form></form>");
 	const divInputTarjeta = $("<div class='border-botton mv-14px'></div>");
 	const iconTarjeta = $("<i class='icon card'></i>");
@@ -22,6 +14,7 @@ const formRegistrarTarjeta = (div)=>{
 	const inputMes = $("<input class='width-35 border-botton' placeholder='Mes' type='text'/>");
 	const span = $("<span>/<span>");
 	const inputAnio = $("<input class='width-35 border-botton' placeholder='Año' type='text'/>");
+	const divButton = $("<div class='flex-center mt-5rem'></div>");
 	const btnContinuar = $("<button>continuar</button>");
 	btnContinuar.attr('disabled', true);
 
@@ -47,6 +40,12 @@ const formRegistrarTarjeta = (div)=>{
 			divInputTarjeta.addClass("border-red");	
 		}
 
+		if(inputMes.val()>= 1 && inputMes.val()<=12){
+			inputMes.removeClass("border-red");
+		}else{
+			inputMes.addClass("border-red");	
+		}
+
 		if(inputAnio.val()>= 17 && inputAnio.val()<=24){
 			inputAnio.removeClass("border-red");
 		}else{
@@ -55,11 +54,12 @@ const formRegistrarTarjeta = (div)=>{
 		
 		if(inputTarjeta.val().length == 16 && inputMes.val()<=12 && inputAnio.val()>= 17 && inputAnio.val()<=24){
 			console.log("guardando datos");
-			state.datosTarjeta = {	card: inputTarjeta.val() ,
-									mes: inputMes.val() ,
-									anio: inputAnio.val()};
-
-			reRenderTarjeta(div);
+			state.tarjeta = inputTarjeta.val();
+			state.mes = inputMes.val();
+			state.anio = inputAnio.val();
+			state.page = registrarClave;						
+			update();
+			
 		}else{
 			console.log("llenar bien los datos");
 		}
@@ -72,42 +72,21 @@ const formRegistrarTarjeta = (div)=>{
 	divInputFecha.append(inputMes);
 	divInputFecha.append(span);
 	divInputFecha.append(inputAnio);
+	divButton.append(btnContinuar);
 
 	formRegistrarTarjeta.append(divInputTarjeta);
 	formRegistrarTarjeta.append(divInputFecha);
-	formRegistrarTarjeta.append(btnContinuar);
+	formRegistrarTarjeta.append(divButton);
 
-	return formRegistrarTarjeta;
+	div.append(img);
+	div.append(h2);
+	div.append(p);
+
+	registrarCard.append(div);
+	registrarCard.append(formRegistrarTarjeta);
+
+	return registrarCard;
 };
 
-const reRenderTarjeta = (div)=>{
-	div.empty();
-	if(state.datosTarjeta == null  && state.completed == null){
-		div.append(mensajeRegistrarTarjeta);
-		div.append(formRegistrarTarjeta(div));
-	}
-	if(state.datosTarjeta != null  && state.completed == null){
-		div.append(mensajeFormFinal);
-		div.append(formFinal(div));
-	}
-	if(state.datosTarjeta != null  && state.completed != null){
-		div.append(pantallaFinal);
-	}
-	
-};
 
-const RegistrarCard = ()=>{
-	const div = $("<div></div>");
-	const divBg = $("<div class='flex-align-center bg-yellow height100'></div>");
-	const icon = $("<i class='icon check'></i>");	
-	const h2 = $("<h2>!BIEN¡<br>Ahora puedes usar Yape</h2>");
 
-	setTimeout(()=>{
-		reRenderTarjeta(div);
-	},3000);
-
-	divBg.append(icon);
-	divBg.append(h2);
-	div.append(divBg);
-	return div;
-}
