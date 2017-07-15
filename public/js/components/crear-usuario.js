@@ -14,38 +14,71 @@ const registrarUsuario = (update)=>{
 	const inputEmail = $("<input id='email' type='text' placeholder='email@dominio.com.pe'>");
 	const divInputPassword = $("<div class='border-botton'></div>");
 	const iconPasword = $("<i class='icon lock'></i>");
-	const inputPasword = $("<input id='password' type='password'placeholder='Ingresa clave de 6 digitos'>");
+	const inputPasword = $("<input id='password' type='password' placeholder='Ingresa clave de 6 digitos'>");
 	const mensaje = $("<p class='text-center fs-14'>Cuida esta clave como oro , es tu acceso a Yape.</p>");
 	const divButton = $("<div class='flex-center mt-3rem'></div>");
 	const btnCrearCuenta = $("<button>Crear Cuenta</button>");
 	btnCrearCuenta.attr('disabled', true);
-		
-	inputNombre.on("keypress", soloLetras);
+	
+	let validateNombre,
+		validateEmail,
+		validatePassword;
 
-	formCrearCuenta.on("keyup", (e)=>{		
-		if(validarInput(inputNombre) && validarInput(inputEmail) && validarInput(inputPasword)){
+	const activeBoton = ()=>{
+
+		if(validateNombre && validateEmail && validatePassword){
 			btnCrearCuenta.attr('disabled', false);
 		}else{
 			btnCrearCuenta.attr('disabled', true);
 		}
+	}
+
+	inputNombre.on({
+		keypress: soloLetras,
+		keyup: (e)=>{
+			if($(e.target).val().length > 1 ){
+				$(e.target).parent().removeClass("border-red");
+				validateNombre = true;
+				activeBoton();
+			}else{
+				$(e.target).parent().addClass("border-red");
+				validateNombre = false;
+				activeBoton();
+			}
+		}		
 	});
+
+	inputEmail.on("keyup", (e)=>{
+		if(/([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})/gi.test($(e.target).val())){
+			$(e.target).parent().removeClass("border-red");
+			validateEmail = true;
+			activeBoton();
+		}else{
+			$(e.target).parent().addClass("border-red");
+			validateEmail = false;
+			activeBoton();
+		}
+	});
+
+	inputPasword.on("keyup", (e)=>{
+		if($(e.target).val().length >= 6){
+			$(e.target).parent().removeClass("border-red");
+			validatePassword = true;
+			activeBoton();
+		}else{
+			$(e.target).parent().addClass("border-red");
+			validatePassword = false;
+			activeBoton();
+		}
+	});
+
 	//click CREAR CUENTA
 	formCrearCuenta.on("submit",(e)=>{update
 		e.preventDefault();
-		if (validarEmail(inputEmail.val())){
-	    	divInputEmail.removeClass("border-red");
-	    } else{
-	     	divInputEmail.addClass("border-red");
-	    }
 
-	    if(inputPasword.val().length >= 6){
-	    	divInputPassword.removeClass("border-red");
-	    }else{
-	      	divInputPassword.addClass("border-red");
-	    }
 	    //si email y el password son correctos
-	    if(validarEmail(inputEmail.val()) && inputPasword.val().length >= 6){
-	    	console.log("enviar Api");
+	    if(validateNombre && validateEmail && validatePassword){
+	    
 	    	let objUsuario = {  phone: state.telefono,
 			    				name: inputNombre.val(),
 			    				email: inputEmail.val(),

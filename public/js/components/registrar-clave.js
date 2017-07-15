@@ -24,7 +24,7 @@ const registrarClave = (update)=>{
 
 	form.on("submit", (e)=>{
 		e.preventDefault();
-		console.log("llamar al Api");
+
 		let objTarjeta ={	phone: state.telefono,
 							cardNumber: state.tarjeta,
 							cardMonth: state.mes,

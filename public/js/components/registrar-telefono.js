@@ -13,58 +13,44 @@ const registrarTelefono = (update)=>{
 	const span = $("<span>Acepto los <a href='#'>Terminos y condiciones</a></span>");
 	const divButton = $("<div class='flex-center mt-5rem'></div>");
 	const button = $("<button>Continuar</button>");
-	const mensajeError = $("<p class='error'></p>");
+	const mensajeError = $("<p class='error text-center'></p>");
 	mensajeError.hide();
 	button.attr('disabled', true);
 	
-	divMensaje.append(img);
-	divMensaje.append(h2);
-	divMensaje.append(p);
-
-	divInput.append(icon);
-	divInput.append(inputTelefono);
-	divButton.append(button);
-	form.append(divInput);
-	form.append(check);
-	form.append(span);
-	form.append(divButton);
-	form.append(mensajeError);
-
 	let validatePhone = false,
 		validateTerms= false;
+
+	const activarBoton = ()=>{
+		if(validatePhone && validateTerms){
+			button.attr('disabled', false);
+		}else{
+			button.attr('disabled', true);
+		}
+	}
 
 	inputTelefono.on({
 		keypress: solo9Digitos,
 		keyup: (e)=>{
 			if($(e.target).val().length ==9){
 				validatePhone = true;
+				activarBoton();
 			}else{
 				validatePhone = false;
+				activarBoton();
 			}
-			console.log(validatePhone);
 		}
 	});
 	
 	check.on("click",(e)=> {
 		if(check.prop("checked")){
 			validateTerms= true;
+			activarBoton();
 		}else{
 			validateTerms = false;
+			activarBoton();
 		}
 	});	
-	/*if(validatePhone && validateTerms){
-		button.attr('disabled', false);
-	}else{
-		button.attr('disabled', true);
-	}*/
-	form.on("change",(e)=> {
-		console.log(validateTerms, validatePhone);
-		if(validatePhone && validateTerms){
-		button.attr('disabled', false);
-	}else{
-		button.attr('disabled', true);
-	}
-	});
+
 
 	form.on("submit",(e)=>{
 		e.preventDefault();
@@ -74,7 +60,8 @@ const registrarTelefono = (update)=>{
 				console.log(error.message);
 				mensajeError.show();
 				mensajeError.text(error.message);
-			} else{
+			}else{
+				mensajeError.text("");
 				console.log(data);
 				state.code = data.code;
 				state.telefono = data.phone;
@@ -82,8 +69,26 @@ const registrarTelefono = (update)=>{
 				update();
 			}					
 
-		}, {phone:inputTelefono.val(),terms:true});
+		},
+		{
+			phone:inputTelefono.val(),
+			terms:true
+		});
 	});
+
+	divMensaje.append(img);
+	divMensaje.append(h2);
+	divMensaje.append(p);
+
+	divInput.append(icon);
+	divInput.append(inputTelefono);
+	divButton.append(button);
+
+	form.append(divInput);
+	form.append(check);
+	form.append(span);
+	form.append(divButton);
+	form.append(mensajeError);
 
 	divContenido.append(divMensaje);
 	divContenido.append(form);

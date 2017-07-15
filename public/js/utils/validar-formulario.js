@@ -28,8 +28,8 @@ const validarInput = (input)=>{
 	}
 };
 
-const validarEmail = (email)=>{
-	if(/([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})/gi.test(email)){
+const validarEmail = (e)=>{
+	if(/([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})/gi.test($(e.target).val())){
 		return true;
 	}else{
 		return false;
@@ -64,8 +64,3 @@ const solo9Digitos = (e)=>{
 	}
 };
 
-const llenarCero = (e)=>{
-	if($(e.target).val()<10 && $(e.target).val().length == 1){
-		$(e.target).val("0"+$(e.target).val());
-	}
-}

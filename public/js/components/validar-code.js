@@ -10,31 +10,39 @@ const validarCode = (update)=>{
 	const divInput = $("<div class='border-botton'></div>");
 	const icon = $("<i class='icon lock'></i>");
 	const input = $("<input type='text'>");
-	const mensajecode = $("<p class='text-center fs-14'>Tu codigo es <span id='mensaje-code'>"+state.code+"</span></p>");
+	const mensajeCode = $("<p class='text-center fs-14'>Tu codigo es <span id='mensaje-code'>"+state.code+"</span></p>");
 	const mensaje = $("<p class='text-center'>Reintentar en <i class='icon clock'></i><span id='temporizador'>21<span><p>");
-	mensajecode.hide();
+	mensajeCode.hide();
+	mensajeCode.css("color", "green");
 
-	input.focus(_=>{
-		mensajecode.show();
-	});
 	const disminuirCronometro = ()=>{
 	    if($("#temporizador").text() > 0) {	   
 	        $("#temporizador").text(eval($("#temporizador").text())-1);
 	    } else {
 	    	refrescarCodigo((error, data)=>{
-	    	if(error) console.log(error.message);
+	    		if(error) console.log(error.message);
+
 		    	state.code = data;
 		    	console.log(data);
 		    	$("#mensaje-code").text(state.code);
 
-		    }, {phone:state.telefono});
+		    },
+		    {
+		    	phone: state.telefono
+		    });
+
+		    input.text("");
 	        $("#temporizador").text(21);
 	    }  
 	}
 
+	input.focus(_=>{
+		mensajeCode.show();
+	});
+
 	formValidarCode.on("keyup", (e)=>{
 		if(input.val() == state.code){
-			console.log("saltar a CrearUsuario");
+
 			clearInterval(cronometro);
 			state.page = registrarUsuario;
 			update();
@@ -51,7 +59,7 @@ const validarCode = (update)=>{
 	divInput.append(icon);
 	divInput.append(input);
 
-	formValidarCode.append(mensajecode);
+	formValidarCode.append(mensajeCode);
 	formValidarCode.append(divInput);	
 	formValidarCode.append(mensaje);
 	divFormulario.append(formValidarCode);
