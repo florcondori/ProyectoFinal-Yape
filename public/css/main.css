@@ -172,3 +172,15 @@ form div{
 .owl-theme .owl-dots .owl-dot.active span{
 	background-color: #F64552;
 }
+@media (min-width: 768px){
+	body{
+		display: flex;
+	    justify-content: center;
+	    align-items: center;
+	    height: 100vh;
+	}
+	.root{
+		width: 378px;
+		height: 667px;
+	}
+}
